@@ -12,7 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('animals', function (Blueprint $table) {
+
             $table->id();
+            $table->unsignedBigInteger('type_id')->nullable();
+            $table->string('name');
+            $table->date('birthday')->nullable();
+            $table->string('area')->nullable();
+            $table->boolean('fix')->default(false);
+            $table->text('description')->nullable();
+            $table->text('personality')->nullable();
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
         });
     }
