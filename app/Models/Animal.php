@@ -23,7 +23,7 @@ class Animal extends Model
         'area',
         'fix',
         'description',
-        'perosnality',
+        'personality',
         'user_id', // 不建議允許批量寫入，後續再更動
     ];
 }
