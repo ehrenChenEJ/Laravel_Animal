@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Animal;
 use Illuminate\Http\Request;
+use Symfony\component\HttpFoundation\Response;
 
 class AnimalController extends Controller
 {
@@ -28,7 +29,11 @@ class AnimalController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $animal = Animal::create($request->all());
+        $animal = $animal->refresh(); // 回傳欄位該筆完整資料
+
+        // 將資料回傳，設定HTTP代碼
+        return response($animal, Response::HTTP_CREATED);
     }
 
     /**
