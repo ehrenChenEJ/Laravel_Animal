@@ -8,4 +8,22 @@ use Illuminate\Database\Eloquent\Model;
 class Animal extends Model
 {
     use HasFactory;
+
+    /**
+     * 可批量寫入的屬性
+     * 
+     * 覆寫父類別屬性
+     * 限制哪些欄位可以被批量寫入（安全性問題）
+     * @var array
+     */
+    protected $fillable = [
+        'type_id',
+        'name',
+        'birthday',
+        'area',
+        'fix',
+        'description',
+        'perosnality',
+        'user_id', // 不建議允許批量寫入，後續再更動
+    ];
 }
