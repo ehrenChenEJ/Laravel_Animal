@@ -2,8 +2,10 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Symfony\Component\HttpFoundation\Response;
 
 class Handler extends ExceptionHandler
 {
@@ -48,9 +50,16 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $exception)
     {
-        // 這樣可擴充/改寫父類別，但不建議改寫vender中的框架或套件的核心檔案
-        // dd()可以中斷停止程式碼
-        dd($exception);
+        if ($request->expectsJson()) { // 如果使用者請求伺服器回傳json格式
+            if ($exception instanceof ModelNotFoundException) { // 攔截到的錯誤是否屬於這個類別
+                return response()->json(
+                    [
+                        'error' => '找不到資源'
+                    ],
+                    Response::HTTP_NOT_FOUND
+                );
+            }
+        }
 
         // 執行父類別render的程式
         return parent::render($request, $exception);
