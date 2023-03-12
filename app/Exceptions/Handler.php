@@ -45,4 +45,14 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    public function render($request, Throwable $exception)
+    {
+        // 這樣可擴充/改寫父類別，但不建議改寫vender中的框架或套件的核心檔案
+        // dd()可以中斷停止程式碼
+        dd($exception);
+
+        // 執行父類別render的程式
+        return parent::render($request, $exception);
+    }
 }
