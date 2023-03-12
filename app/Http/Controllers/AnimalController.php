@@ -65,6 +65,10 @@ class AnimalController extends Controller
      */
     public function destroy(Animal $animal)
     {
-        //
+        // 變數名稱必須對應到路由 api/animals/{animal}
+        // “隱形模式綁定”
+        $animal->delete();
+
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }
