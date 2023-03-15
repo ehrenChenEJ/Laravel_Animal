@@ -57,7 +57,11 @@ class AnimalController extends Controller
      */
     public function update(Request $request, Animal $animal)
     {
-        //
+        // put通常是替換掉舊資料
+        // $request 使用者輸入資料
+        // 動物資料ID
+        $animal->update($request->all());
+        return response($animal, Response::HTTP_OK);
     }
 
     /**
