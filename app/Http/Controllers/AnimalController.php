@@ -130,6 +130,20 @@ class AnimalController extends Controller
      */
     public function update(Request $request, Animal $animal)
     {
+        // 表單驗證
+        $this->validate($request, [
+            'type_id'  => 'nullable|integer',
+            'name'     => 'required|string|max:255',
+            'birthday' => 'nullable|date',
+            'area'     => 'nullable|string|max:255',
+            'fix'      => 'required|boolean',
+            'description' => 'nullable',
+            'personality' => 'nullable'
+        ]);
+
+        // 後面登入驗證再改
+        $request['user_id'] = 1;
+
         // put通常是替換掉舊資料
         // $request 使用者輸入資料
         // 動物資料ID
