@@ -27,11 +27,24 @@ class AnimalController extends Controller
             }
         }
 
+        // 列表排序
+        if (isset($request->sorts)) {
+            $sorts = explode(',', $request->sorts);
+
+            foreach ($sorts as $key => $sort) {
+                list($key, $value) = explode(':', $sort);
+                if ($value == 'asc' || $value == 'desc') {
+                    $query->orderBy($key, $value);
+                } else {
+                    $query->orderBy('id', 'desc');
+                }
+            }
+        }
+
         // 使用Model orderBy方法加入SQL語法排序條件，依照id由大到小排序
-        $animals = $query->orderBy('id', 'desc')
-            ->paginate($limit) // 使用分頁方法，最多回傳$limit比資料，自動包一個data的key值以及其他分頁的資訊
+        $animals = $query
+            ->paginate($limit)
             ->appends($request->query());
-        // appends => 將使用者請求的參數附加在分頁資訊中
 
         return response($animals, Response::HTTP_OK);
     }
