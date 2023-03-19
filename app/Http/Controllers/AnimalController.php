@@ -13,7 +13,9 @@ class AnimalController extends Controller
      */
     public function index()
     {
-        //
+        // get method沒有任何篩選機制，所以會找出列表全部的資料
+        $animal = Animal::get();
+        return response(['data' => $animal], Response::HTTP_OK);
     }
 
     /**
