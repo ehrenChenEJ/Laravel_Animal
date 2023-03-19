@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Animal;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Cache;
 
 class AnimalController extends Controller
 {
@@ -13,6 +14,28 @@ class AnimalController extends Controller
      */
     public function index(Request $request)
     {
+        // 使用網址設定為快取檔案名稱
+        // get url
+        $url = $request->url();
+
+        // get query params
+        $queryParams = $request->query();
+
+        // 每個人請求的參數會不一樣，使用參數第一個英文字排序
+        ksort($queryParams);
+
+        // 利用http_build_query方法將查詢參數轉為字串
+        $queryString = http_build_query($queryParams);
+
+        // 組成完整網址
+        $fullUrl = "{$url}?{$queryString}";
+
+        // 使用laravel查詢是否有快取紀錄
+        if (Cache::has($fullUrl)) {
+            // 使用return 直接回傳快取資料，不作其他程式邏輯
+            return Cache::get($fullUrl);
+        }
+
         // 設定預設值
         $limit = $request->limit ?? 10; // 未設定預設值為10
         $query = Animal::query();
@@ -46,7 +69,10 @@ class AnimalController extends Controller
             ->paginate($limit)
             ->appends($request->query());
 
-        return response($animals, Response::HTTP_OK);
+        // 沒有快取紀錄的話記住資料，設定60秒過期，快取名稱使用網址命名
+        return Cache::remember($fullUrl, 60, function () use ($animals) {
+            return response($animals, Response::HTTP_OK);
+        });
     }
 
     /**
