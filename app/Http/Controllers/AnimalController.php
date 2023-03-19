@@ -88,6 +88,20 @@ class AnimalController extends Controller
      */
     public function store(Request $request)
     {
+        // 表單驗證
+        $this->validate($request, [
+            'type_id'  => 'nullable|integer',
+            'name'     => 'required|string|max:255',
+            'birthday' => 'nullable|date',
+            'area'     => 'nullable|string|max:255',
+            'fix'      => 'required|boolean',
+            'description' => 'nullable',
+            'personality' => 'nullable'
+        ]);
+
+        // 後面登入驗證再改
+        $request['user_id'] = 1;
+
         $animal = Animal::create($request->all());
         $animal = $animal->refresh(); // 回傳欄位該筆完整資料
 
