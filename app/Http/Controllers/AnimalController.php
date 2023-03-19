@@ -11,11 +11,18 @@ class AnimalController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // get method沒有任何篩選機制，所以會找出列表全部的資料
-        $animal = Animal::get();
-        return response(['data' => $animal], Response::HTTP_OK);
+        // 設定預設值
+        $limit = $request->limit ?? 10; // 未設定預設值為10
+
+        // 使用Model orderBy方法加入SQL語法排序條件，依照id由大到小排序
+        $animals = Animal::orderBy('id', 'desc')
+            ->paginate($limit) // 使用分頁方法，最多回傳$limit比資料，自動包一個data的key值以及其他分頁的資訊
+            ->appends($request->query());
+        // appends => 將使用者請求的參數附加在分頁資訊中
+
+        return response($animals, Response::HTTP_OK);
     }
 
     /**
