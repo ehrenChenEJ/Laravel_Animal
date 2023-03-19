@@ -15,9 +15,20 @@ class AnimalController extends Controller
     {
         // 設定預設值
         $limit = $request->limit ?? 10; // 未設定預設值為10
+        $query = Animal::query();
+
+        // 篩選邏輯 如果有設定filter參數
+        if (isset($request->filters)) {
+            $filters = explode(',', $request->filters);
+            foreach ($filters as $key => $filter) {
+                list($key, $value) = explode(":", $filter);
+                $query->where($key, 'like', "%$value%"); // (欄位名稱,比對條件＿省略的話就是要完全一樣,要查詢比對的字串)
+                // orWhere任一條件成立
+            }
+        }
 
         // 使用Model orderBy方法加入SQL語法排序條件，依照id由大到小排序
-        $animals = Animal::orderBy('id', 'desc')
+        $animals = $query->orderBy('id', 'desc')
             ->paginate($limit) // 使用分頁方法，最多回傳$limit比資料，自動包一個data的key值以及其他分頁的資訊
             ->appends($request->query());
         // appends => 將使用者請求的參數附加在分頁資訊中
