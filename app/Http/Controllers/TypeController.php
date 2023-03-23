@@ -81,7 +81,22 @@ class TypeController extends Controller
      */
     public function update(Request $request, Type $type)
     {
-        //
+        $this->validate($request, [
+            'name' => [
+                'max:50',
+                // 更新時排除自己的名字檢查是否是唯一值
+                Rule::unique('types', 'name')->ignore($type->name, 'name')
+            ],
+            'sort' => [
+                'nullable',
+                'integer'
+            ]
+        ]);
+
+        // 更新資料庫
+        $type->update($request->all());
+
+        return response(['data' => $type], Response::HTTP_OK);
     }
 
     /**
