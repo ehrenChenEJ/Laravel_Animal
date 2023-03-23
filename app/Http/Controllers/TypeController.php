@@ -65,7 +65,7 @@ class TypeController extends Controller
      */
     public function show(Type $type)
     {
-        //
+        return response(['data' => $type], Response::HTTP_OK);
     }
 
     /**
