@@ -59,7 +59,8 @@ class Handler extends ExceptionHandler
             if ($exception instanceof ModelNotFoundException) { // 攔截到的錯誤是否屬於這個類別
                 return response()->json(
                     [
-                        'error' => '找不到資源'
+                        'error' => '找不到資源',
+                        'code'  => Response::HTTP_NOT_FOUND
                     ],
                     Response::HTTP_NOT_FOUND
                 );
