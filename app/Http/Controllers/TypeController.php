@@ -23,14 +23,6 @@ class TypeController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
@@ -66,14 +58,6 @@ class TypeController extends Controller
     public function show(Type $type)
     {
         return response(['data' => $type], Response::HTTP_OK);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Type $type)
-    {
-        //
     }
 
     /**
