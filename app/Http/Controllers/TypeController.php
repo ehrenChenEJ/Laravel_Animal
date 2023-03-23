@@ -104,6 +104,8 @@ class TypeController extends Controller
      */
     public function destroy(Type $type)
     {
-        //
+        $type->delete();
+
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }
