@@ -49,7 +49,7 @@ class TypeController extends Controller
 
         $type =  Type::create($request->all()); // 寫入資料庫
 
-        return response(['data' => $type, Response::HTTP_CREATED]);
+        return response(['data' => $type], Response::HTTP_CREATED);
     }
 
     /**
