@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Type;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\Response;
 
 class TypeController extends Controller
 {
@@ -12,7 +14,12 @@ class TypeController extends Controller
      */
     public function index()
     {
-        //
+        // 分類少量，可以全輸出
+        $types = Type::get();
+
+        return response([
+            'data' => $types
+        ], Response::HTTP_OK);
     }
 
     /**
