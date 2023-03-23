@@ -35,7 +35,29 @@ class TypeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // 另外一種寫法
+        $this->validate($request, [
+            'name' => [
+                'required',
+                'max:50',
+                // type表中 name要是唯一值
+                Rule::unique('types', 'name')
+            ],
+            'sort' => [
+                'nullable',
+                'integer'
+            ],
+        ]);
+
+        // 如果沒有傳入欄位內容
+        if (!isset($request->sort)) {
+            $max = Type::max('sort'); // 找目前資料表的最大值
+            $request['sort'] = $max + 1;
+        }
+
+        $type =  Type::create($request->all()); // 寫入資料庫
+
+        return response(['data' => $type, Response::HTTP_CREATED]);
     }
 
     /**
