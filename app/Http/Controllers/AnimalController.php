@@ -100,7 +100,7 @@ class AnimalController extends Controller
     {
         // 表單驗證
         $this->validate($request, [
-            'type_id'  => 'nullable|integer',
+            'type_id'  => 'nullable|exists:types,id',
             'name'     => 'required|string|max:255',
             'birthday' => 'nullable|date',
             'area'     => 'nullable|string|max:255',
@@ -143,7 +143,7 @@ class AnimalController extends Controller
     {
         // 表單驗證
         $this->validate($request, [
-            'type_id'  => 'nullable|integer',
+            'type_id'  => 'nullable|exists:types,id',
             'name'     => 'required|string|max:255',
             'birthday' => 'nullable|date',
             'area'     => 'nullable|string|max:255',
