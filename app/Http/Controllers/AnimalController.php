@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AnimalResource;
 use App\Models\Animal;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -106,7 +107,8 @@ class AnimalController extends Controller
         $animal = $animal->refresh(); // 回傳欄位該筆完整資料
 
         // 將資料回傳，設定HTTP代碼
-        return response($animal, Response::HTTP_CREATED);
+        //return response($animal, Response::HTTP_CREATED);
+        return new AnimalResource($animal);
     }
 
     /**
@@ -114,7 +116,7 @@ class AnimalController extends Controller
      */
     public function show(Animal $animal)
     {
-        return response($animal, Response::HTTP_OK);
+        return new AnimalResource($animal);
     }
 
     /**
@@ -148,7 +150,9 @@ class AnimalController extends Controller
         // $request 使用者輸入資料
         // 動物資料ID
         $animal->update($request->all());
-        return response($animal, Response::HTTP_OK);
+
+        // return response($animal, Response::HTTP_OK);
+        return new AnimalResource($animal);
     }
 
     /**
