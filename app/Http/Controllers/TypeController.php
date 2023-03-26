@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TypeCollection;
 use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -15,11 +16,13 @@ class TypeController extends Controller
     public function index()
     {
         // 分類少量，可以全輸出
-        $types = Type::get();
+        $types = Type::select('id', 'name', 'sort')->get();
 
-        return response([
-            'data' => $types
-        ], Response::HTTP_OK);
+        // return response([
+        //     'data' => $types
+        // ], Response::HTTP_OK);
+
+        return new TypeCollection($types);
     }
 
     /**
