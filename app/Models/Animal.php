@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use Carbon\Carbon; // 操作時間的套件
+
 class Animal extends Model
 {
     use HasFactory;
@@ -37,5 +39,16 @@ class Animal extends Model
         // belongsTo(類別名稱,參照欄位,主鍵)
         // 因為使用laravel預設的type_id主鍵預設為id，所以後面可以省略
         return $this->belongsTo('App\Models\Type');
+    }
+
+    /**
+     * get[]Attribute的命名可以讓$animal->age連結上
+     * $animal->age會自動執行這個function
+     */
+    public function getAgeAttribute()
+    {
+        $diff = Carbon::now()->diff($this->birthday);
+
+        return "{$diff->y}歲{$diff->m}月";
     }
 }
