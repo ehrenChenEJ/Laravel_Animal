@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\AnimalResource;
+use App\Http\Resources\AnimalCollection;
 use App\Models\Animal;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,7 +40,14 @@ class AnimalController extends Controller
 
         // 設定預設值
         $limit = $request->limit ?? 10; // 未設定預設值為10
-        $query = Animal::query();
+
+        /**
+         * 加入預處理with並傳入type
+         * 會對應到model設定好的關聯方法，減少跟資料庫的溝通
+         * 
+         * 就不會十筆資料，資料庫收到11次交易
+         */
+        $query = Animal::query()->with('type');
 
         // 篩選邏輯 如果有設定filter參數
         if (isset($request->filters)) {
@@ -72,7 +80,8 @@ class AnimalController extends Controller
 
         // 沒有快取紀錄的話記住資料，設定60秒過期，快取名稱使用網址命名
         return Cache::remember($fullUrl, 60, function () use ($animals) {
-            return response($animals, Response::HTTP_OK);
+            // return response($animals, Response::HTTP_OK);
+            return new AnimalCollection($animals);
         });
     }
 
